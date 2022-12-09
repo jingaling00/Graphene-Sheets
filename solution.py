@@ -112,7 +112,7 @@ class CarbonFiller:
         q_min = -2
         p_max = math.ceil(((CarbonFiller.normVector(Ch))[1])*(2/math.sqrt(3)))
         q_max = math.ceil(((CarbonFiller.normVector(T))[1])*(2/3))
-        return [p_min, p_max], [q_min, q_max]
+        return [np.array([p_min,p_max]),np.array([q_min,q_max])]
     
     @staticmethod
     def coordinates(pg, qg):
