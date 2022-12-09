@@ -134,6 +134,9 @@ class CarbonFiller:
         for row in pg:
             row *= np.around(math.sqrt(3)/2,decimals=3)
         for row in qg:
+            for i in range(1,len(row)):
+                if row[i] != row[i-1]:
+                    return None
             if row[0] % 2 == 0:
                 for i in range(0,qg.shape[1],2):
                     row[i] *= 1.5
