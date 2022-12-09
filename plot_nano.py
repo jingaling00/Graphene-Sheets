@@ -27,7 +27,7 @@ def get_connectivity_ind(points, low_bound, up_bound):
     non_zero_values = np.where(conn_values != 0)
     x = [p for p in non_zero_values[0]]
     y = [p for p in non_zero_values[1]]
-    return x,y
+    return [x,y]
 
 def plot_carbon_carbon(p1, p2):
     x = [p1[0], p2[0]]
