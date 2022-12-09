@@ -16,12 +16,32 @@ class CarbonFiller:
     """
     
     def __init__(self, n, m, l):
+        """
+        Initializes attributes of carbon filler.
+
+        Parameters
+        ----------
+        n : number of jumps along the a1 vector (sqrt 3, 0).
+        m : number of jumps along the a2 vector ((sqrt 3)/2, -1.5)
+        l : length of normal vector
+
+        Returns
+        -------
+        None.
+
+        """
         self.n = n
         self.m = m
         self.l = l
         self.name = 'Carbon Filler'
         
     def vector(self):
+        """
+        Returns
+        -------
+        Calculates horizontal vector of graphene sheet based on attributes.
+
+        """
         a1 = np.array([math.sqrt(3),0])
         a2 = np.array([((math.sqrt(3))/2),-1.5])
         a1 *= self.n
@@ -29,24 +49,65 @@ class CarbonFiller:
         Ch_vector = a1+a2
         return np.around(Ch_vector, decimals=3)
     
-    def TVector(self, Ch_vector):        
+    def TVector(self, Ch_vector):      
+        """
+        Parameters
+        ----------
+        Ch_vector : Must input horizontal vector of graphene sheet.
+        
+        Returns
+        -------
+        The normal vector to Ch_vector; the vertical vector of graphene sheet.
+        """
         T_vec = CarbonFiller.normTvector(Ch_vector)
         normT_vec = CarbonFiller.normVector(T_vec)
         return self.l * normT_vec[0]
     
     @staticmethod
     def normVector(vector):
+        """
+        Parameters
+        ----------
+        vector : Arbitrary vector.
+
+        Returns
+        -------
+        norm_vec : Input vector normalized.
+        norm : Magnitude of input vector.
+
+        """
         norm = np.around(np.linalg.norm(vector), decimals=3)
         norm_vec = np.around(vector / norm, decimals=3)
         return norm_vec, norm
     
     @staticmethod
     def normTvector(c_hat):
+        """
+        Parameters
+        ----------
+        c_hat : Arbitrary vector.
+
+        Returns
+        -------
+        t_hat : Normal vector to c_hat.
+
+        """
         t_hat = np.array([-c_hat[1], c_hat[0]])
         return t_hat
         
     @staticmethod
     def pq(Ch, T):
+        """
+        Parameters
+        ----------
+        Ch : Horizontal vector of graphene sheet.
+        T : Vertical vector of graphene sheet.
+
+        Returns
+        -------
+        Two sets of bounds for locus of points included in the graphene sheet.
+
+        """
         p_min = 0
         q_min = -2
         p_max = math.ceil(((CarbonFiller.normVector(Ch))[1])*(2/math.sqrt(3)))
@@ -55,6 +116,19 @@ class CarbonFiller:
     
     @staticmethod
     def coordinates(pg, qg):
+        """
+
+        Parameters
+        ----------
+        pg : Horizontal bounds for carbon vertices.
+        qg : Vertical bounds for carbon vertices.
+
+        Returns
+        -------
+        pg : Transforms horizontal bounds to points on the Cartesian plane.
+        qg : Transforms vertical bounds to points on the Cartesian plane.
+
+        """
         pg = np.array([np.array(p) for p in pg],dtype=float)
         qg = np.array([np.array(q) for q in qg],dtype=float)
         for row in pg:
@@ -74,6 +148,19 @@ class CarbonFiller:
     
     @staticmethod
     def distance(x, y, c_hat):
+        """
+        Parameters
+        ----------
+        x : All x-coordinates of points in graphene sheet.
+        y : All y-coordinates of points in graphene sheet.
+        c_hat : Horizontal vector of graphene sheet. 
+
+        Returns
+        -------
+        s : Array of dot product values of every point and c_hat.
+        t : Array of dot product values of every point and t_hat (normal to c_hat).
+
+        """
         s = np.array([])
         for i in range(x.shape[0]):
             vals = []
@@ -167,6 +254,16 @@ class CarbonFiller:
         return pos_nt
     
 def Graphene(n, m ,l):
+    """
+    Parameters
+    ----------
+    Uses parameters n, m, l to create object of CarbonFiller class.
+
+    Returns
+    -------
+    pos_gr : All points of graphene sheet.
+
+    """
     Cf = CarbonFiller(n, m, l)
     Ch = Cf.vector()
     T = Cf.TVector(Ch)
@@ -177,16 +274,3 @@ def Graphene(n, m ,l):
     s, t = Cf.distance(x, y, c_hat)
     pos_gr = include_atoms_gr(x, y, s, t, arclen, l)
     return pos_gr
-
-
-if __name__ == '__main__':  
-
-    pos_gr = Graphene(5,0,5)
-    low_th = 0.95
-    up_th = 1.05
-    xx,yy = get_connectivity_ind(pos_gr,low_th,up_th)
-    plot_mesh(xx,yy,pos_gr)
-    
-    
-
-
