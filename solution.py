@@ -134,19 +134,15 @@ class CarbonFiller:
         for row in pg:
             row *= np.around(math.sqrt(3)/2,decimals=3)
         for row in qg:
-            for i in range(1,len(row)):
-                if row[i] != row[i-1]:
-                    return pg, qg
-            if row[0] % 2 == 0:
-                for i in range(0,qg.shape[1],2):
+            for i in range(len(row)):
+                if row[i] % 2 == 0 and i % 2 == 0:
                     row[i] *= 1.5
-                for i in range(1,qg.shape[1]-1,2):
-                    row[i] = row[i-1] - 0.5
-            else:
-                for i in range(0,qg.shape[1],2):
+                elif row[i] % 2 == 0 and i % 2 == 1:
                     row[i] = row[i] * 1.5 - 0.5
-                for i in range(1,qg.shape[1]-1,2):
-                    row[i] = row[i-1] + 0.5
+                elif row[i] % 2 == 1 and i % 2 == 0:
+                    row[i] = row[i] * 1.5 - 0.5
+                elif row[i] % 2 == 1 and i % 2 == 1:
+                    row[i] *= 1.5
         return pg, qg
     
     @staticmethod
