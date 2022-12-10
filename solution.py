@@ -109,9 +109,9 @@ class CarbonFiller:
 
         """
         p_min = 0
-        q_min = -2
-        p_max = math.ceil(((CarbonFiller.normVector(Ch))[1])*(2/math.sqrt(3)))
-        q_max = math.ceil(((CarbonFiller.normVector(T))[1])*(2/3))
+        q_min = math.floor(Ch[1]*(2/3))
+        p_max = math.ceil(((Ch[0] + T[0])*(2/math.sqrt(3))))
+        q_max = math.ceil(T[1]*(2/3))
         return [np.array([p_min,p_max]),np.array([q_min,q_max])]
     
     @staticmethod
